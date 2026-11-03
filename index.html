@@ -1,0 +1,191 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#17324d">
+<title>SADRUN TRADERS | Shop Manager</title>
+<style>
+:root{--navy:#17324d;--navy2:#244b6b;--bg:#f2f5f8;--line:#dce3ea;--green:#16734a;--red:#a83232;--muted:#64748b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#182636;font:14px system-ui,-apple-system,Arial}
+header{background:var(--navy);color:#fff;padding:13px 15px;display:flex;align-items:center;justify-content:space-between;gap:10px;position:sticky;top:0;z-index:5}
+header h1{font-size:18px;margin:0}header small{opacity:.8}.headright{display:flex;align-items:center;gap:7px}
+button{border:0;border-radius:8px;background:var(--navy);color:#fff;padding:10px 12px;font-weight:650;font-size:13px;cursor:pointer}
+button:disabled{opacity:.5;cursor:not-allowed}.lang{background:#fff;color:var(--navy);min-width:48px}
+nav{display:flex;overflow:auto;gap:5px;padding:8px;background:#fff;position:sticky;top:57px;z-index:4;border-bottom:1px solid var(--line)}
+nav button{background:#edf1f5;color:#26384a;white-space:nowrap}nav button.active{background:var(--navy);color:#fff}
+main{max-width:1100px;margin:auto;padding:13px}.page{display:none}.page.active{display:block}
+h2{font-size:19px;margin:8px 0 13px}.panel,.stat{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px;margin:10px 0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:20px;margin-top:5px;overflow-wrap:anywhere}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+label{display:block;font-size:12px;color:#465568}input,select,textarea{display:block;width:100%;margin-top:5px;padding:10px;border:1px solid #cbd5df;border-radius:8px;background:#fff;font:inherit;color:#172536;min-width:0}
+.actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.secondary{background:#e8edf2;color:#203246}.danger{background:var(--red)}.success{background:var(--green)}
+.tablewrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:580px}th,td{padding:8px 7px;border-bottom:1px solid #e8edf1;text-align:left;font-size:12px}th{background:#f7f9fb}
+.small{font-size:12px;color:var(--muted)}.total{font-size:20px;font-weight:800}.muted{color:var(--muted)}.notice{padding:10px;background:#fff8df;border:1px solid #f0df9c;border-radius:8px;font-size:12px;margin:10px 0}
+.result button{width:100%;text-align:left;margin:3px 0;background:#eaf0f5;color:#172536}.right{text-align:right}.hidden{display:none!important}
+dialog{width:min(95%,700px);border:0;border-radius:12px;padding:17px;max-height:92vh;overflow:auto}dialog::backdrop{background:#0008}
+.invoice{color:#111;background:#fff}.invoice h2,.invoice h3{text-align:center}.invoice table{min-width:0}.invoice table th,.invoice table td{font-size:11px;padding:6px}.invoice .sum{text-align:right;line-height:1.8;margin-top:10px}
+.badge{display:inline-block;background:#eef2f6;padding:3px 7px;border-radius:20px;font-size:11px}.low{color:#a83232;font-weight:700}
+@media(min-width:720px){.stats{grid-template-columns:repeat(4,1fr)}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media print{body *{visibility:hidden!important}#printContent,#printContent *{visibility:visible!important}#printContent{position:absolute;left:0;top:0;width:100%;padding:10px}#invoiceActions{display:none!important}}
+</style>
+</head>
+<body>
+<header><div><h1 id="shopTitle">SADRUN TRADERS</h1><small id="appSub">Fertilizer • Seed • Pesticide Shop Manager</small></div><div class="headright"><span class="badge" style="background:#ffffff22;color:white">V2.0</span><button class="lang" id="langBtn">हिंदी</button></div></header>
+<nav id="nav">
+<button class="active" data-page="home" data-en="Dashboard" data-hi="डैशबोर्ड">Dashboard</button>
+<button data-page="bill" data-en="Billing" data-hi="बिलिंग">Billing</button>
+<button data-page="products" data-en="Products" data-hi="प्रोडक्ट">Products</button>
+<button data-page="purchase" data-en="Purchase" data-hi="खरीद">Purchase</button>
+<button data-page="customers" data-en="Customers" data-hi="ग्राहक">Customers</button>
+<button data-page="accounts" data-en="Accounts" data-hi="खाता-बही">Accounts</button>
+<button data-page="reports" data-en="Reports / Backup" data-hi="रिपोर्ट / बैकअप">Reports / Backup</button>
+<button data-page="settings" data-en="Settings" data-hi="सेटिंग">Settings</button>
+</nav>
+<main>
+<section id="home" class="page active"><h2 data-en="Shop Dashboard" data-hi="दुकान का डैशबोर्ड">Shop Dashboard</h2>
+<div class="stats">
+<div class="stat"><span data-en="Today's Sales" data-hi="आज की बिक्री">Today's Sales</span><strong id="todaySales">₹0</strong></div>
+<div class="stat"><span data-en="Bills Today" data-hi="आज के बिल">Bills Today</span><strong id="billCount">0</strong></div>
+<div class="stat"><span data-en="Products" data-hi="कुल प्रोडक्ट">Products</span><strong id="productCount">0</strong></div>
+<div class="stat"><span data-en="Customer Due" data-hi="ग्राहक बकाया">Customer Due</span><strong id="totalDue">₹0</strong></div>
+<div class="stat"><span data-en="Estimated Gross Profit" data-hi="अनुमानित सकल मुनाफा">Estimated Gross Profit</span><strong id="grossProfit">₹0</strong></div>
+<div class="stat"><span data-en="Low Stock Items" data-hi="कम स्टॉक वाले आइटम">Low Stock Items</span><strong id="lowCount">0</strong></div>
+</div>
+<div class="panel"><b data-en="Quick Actions" data-hi="त्वरित काम">Quick Actions</b><div class="actions"><button data-jump="bill" data-en="+ New Bill" data-hi="+ नया बिल">+ New Bill</button><button data-jump="products" class="secondary" data-en="+ Add Product" data-hi="+ प्रोडक्ट जोड़ें">+ Add Product</button><button data-jump="purchase" class="secondary" data-en="+ Purchase Entry" data-hi="+ खरीद दर्ज करें">+ Purchase Entry</button><button data-jump="accounts" class="secondary" data-en="+ Expense" data-hi="+ खर्च दर्ज करें">+ Expense</button></div></div>
+<div class="panel"><b data-en="Low Stock Alert" data-hi="कम स्टॉक अलर्ट">Low Stock Alert</b><div id="lowStockList" class="small">—</div></div>
+<div class="panel"><b data-en="Recent Bills" data-hi="हाल के बिल">Recent Bills</b><div class="tablewrap"><table><thead><tr><th>Bill</th><th>Customer</th><th>Date</th><th>Total</th><th>Due</th></tr></thead><tbody id="recentBills"></tbody></table></div></div>
+</section>
+
+<section id="bill" class="page"><h2 data-en="New Sales Invoice" data-hi="नया बिक्री बिल">New Sales Invoice</h2>
+<div class="panel grid">
+<label data-en="Customer Name" data-hi="ग्राहक का नाम">Customer Name<input id="custName" placeholder="Cash Customer"></label>
+<label data-en="Mobile Number" data-hi="मोबाइल नंबर">Mobile Number<input id="custPhone" inputmode="numeric"></label>
+<label data-en="Payment Mode" data-hi="पेमेंट मोड">Payment Mode<select id="payMode"><option>Cash</option><option>UPI</option><option>Card</option><option>Credit</option><option>Bank</option></select></label>
+<label data-en="Barcode / Product Search" data-hi="बारकोड / प्रोडक्ट सर्च">Barcode / Product Search<input id="itemSearch" placeholder="Scan barcode or type name"></label>
+</div>
+<div class="actions"><button id="cameraBtn" class="secondary" data-en="Scan with Camera" data-hi="कैमरे से स्कैन करें">Scan with Camera</button><span class="small" id="scanStatus"></span></div>
+<div id="matches" class="result"></div>
+<div class="panel"><b data-en="Cart Items" data-hi="बिल के आइटम">Cart Items</b><div class="tablewrap"><table><thead><tr><th>Product</th><th>Rate</th><th>Qty</th><th>GST</th><th>Amount</th><th></th></tr></thead><tbody id="cartRows"></tbody></table></div>
+<div class="grid"><label data-en="Discount (₹)" data-hi="छूट (₹)">Discount (₹)<input id="discount" type="number" min="0" value="0"></label><label data-en="Amount Received (₹)" data-hi="जमा राशि (₹)">Amount Received (₹)<input id="received" type="number" min="0" value="0"></label></div>
+<p>Subtotal: <b id="subTotal">₹0</b> &nbsp; GST: <b id="taxTotal">₹0</b></p><p class="total"><span data-en="Grand Total:" data-hi="कुल:">Grand Total:</span> <span id="grandTotal">₹0</span></p>
+<div class="actions"><button id="saveBill" class="success" data-en="Save Bill & Print" data-hi="बिल सेव करें">Save Bill & Print</button><button id="clearCart" class="secondary" data-en="Clear Cart" data-hi="खाली करें">Clear Cart</button></div></div>
+<div class="panel"><b data-en="Sales History" data-hi="बिक्री हिस्ट्री">Sales History</b><div class="tablewrap"><table><thead><tr><th>Bill</th><th>Customer</th><th>Date</th><th>Total</th><th>Due</th><th>Action</th></tr></thead><tbody id="salesRows"></tbody></table></div></div>
+</section>
+
+<section id="products" class="page"><h2 data-en="Product Master & Stock" data-hi="प्रोडक्ट और स्टॉक">Product Master & Stock</h2>
+<div class="panel grid">
+<label>Barcode / Item Code<input id="pCode"></label><label data-en="Product Name" data-hi="प्रोडक्ट नाम">Product Name<input id="pName"></label>
+<label>Category<select id="pCat"><option>Fertilizer</option><option>Seed</option><option>Pesticide</option><option>Other</option></select></label>
+<label>Unit<input id="pUnit" placeholder="Bag / Kg / Litre / Piece" value="Piece"></label>
+<label>Purchase Rate<input id="pCost" type="number" min="0"></label><label>Sales Rate<input id="pRate" type="number" min="0"></label>
+<label>GST %<input id="pTax" type="number" min="0" value="0"></label><label>Opening Stock<input id="pStock" type="number" min="0" value="0"></label>
+<label>Low Stock Alert Level<input id="pMin" type="number" min="0" value="5"></label><label>HSN Code<input id="pHsn"></label>
+</div><div class="actions"><button id="saveProduct" data-en="Save Product" data-hi="प्रोडक्ट सेव करें">Save Product</button><button class="secondary" id="cancelEdit" data-en="Clear Form" data-hi="फॉर्म साफ करें">Clear Form</button></div>
+<div class="panel"><input id="productFilter" placeholder="Search by product / barcode"><div class="tablewrap"><table><thead><tr><th>Code</th><th>Name</th><th>Category</th><th>Rate</th><th>Stock</th><th>Action</th></tr></thead><tbody id="productRows"></tbody></table></div></div>
+</section>
+
+<section id="purchase" class="page"><h2 data-en="Purchase Entry" data-hi="खरीद एंट्री">Purchase Entry</h2>
+<div class="panel grid"><label>Supplier Name<input id="supplier"></label><label>Supplier Bill No.<input id="supplierBill"></label><label>Product<select id="purchaseProduct"></select></label><label>Quantity<input id="purchaseQty" type="number" min=".001" step=".001" value="1"></label><label>Purchase Rate / Unit<input id="purchaseRate" type="number" min="0"></label><label>Purchase Date<input id="purchaseDate" type="date"></label></div>
+<button id="savePurchase" class="success" data-en="Save Purchase & Update Stock" data-hi="खरीद सेव करें और स्टॉक बढ़ाएँ">Save Purchase & Update Stock</button>
+<div class="panel"><b>Purchase History</b><div class="tablewrap"><table><thead><tr><th>Date</th><th>Supplier</th><th>Product</th><th>Qty</th><th>Total</th></tr></thead><tbody id="purchaseRows"></tbody></table></div></div>
+</section>
+
+<section id="customers" class="page"><h2 data-en="Customer Ledger / Due Collection" data-hi="ग्राहक उधारी / जमा">Customer Ledger / Due Collection</h2>
+<div class="panel grid"><label>Customer Name<input id="ledgerName"></label><label>Mobile<input id="ledgerPhone"></label><label>Payment Received (₹)<input id="ledgerAmount" type="number" min=".01"></label><label>Note<input id="ledgerNote" placeholder="Old due payment"></label></div>
+<button id="addPayment" class="success">Save Payment</button>
+<div class="panel"><div class="tablewrap"><table><thead><tr><th>Customer</th><th>Mobile</th><th>Balance Due</th><th>Payments</th></tr></thead><tbody id="ledgerRows"></tbody></table></div></div>
+</section>
+
+<section id="accounts" class="page"><h2 data-en="Accounts & Expenses" data-hi="खाता-बही और खर्च">Accounts & Expenses</h2>
+<div class="panel grid"><label>Entry Type<select id="entryType"><option value="expense">Expense</option><option value="income">Other Income</option></select></label><label>Category<input id="entryCategory" placeholder="Rent / Salary / Transport"></label><label>Amount (₹)<input id="entryAmount" type="number" min=".01"></label><label>Payment Mode<select id="entryMode"><option>Cash</option><option>UPI</option><option>Bank</option><option>Card</option></select></label><label>Note<input id="entryNote"></label><label>Date<input id="entryDate" type="date"></label></div>
+<button id="saveEntry" class="success">Save Entry</button>
+<div class="panel"><b>Income / Expense History</b><div class="tablewrap"><table><thead><tr><th>Date</th><th>Type</th><th>Category</th><th>Mode</th><th>Amount</th><th>Note</th></tr></thead><tbody id="accountRows"></tbody></table></div></div>
+</section>
+
+<section id="reports" class="page"><h2 data-en="Reports & Backup" data-hi="रिपोर्ट और बैकअप">Reports & Backup</h2>
+<div class="panel" id="reportSummary"></div>
+<div class="panel"><b>Data Backup & Restore</b><p class="small">Backup file ko phone, Drive or memory card mein safe rakhein. App data clear hone par backup se restore karein.</p>
+<div class="actions"><button id="backup">Download Full Backup</button><label class="secondary" style="padding:10px;border-radius:8px">Restore Backup<input id="restore" type="file" accept=".json" style="max-width:210px"></label><button class="secondary" id="exportCsv">Export Products CSV</button><button class="secondary" id="exportBills">Export Sales CSV</button></div></div>
+<div class="notice">Data is stored locally on this device. This version does not provide cloud sync or multi-device sharing. Take regular backups. Confirm GST/tax compliance with your accountant.</div>
+</section>
+
+<section id="settings" class="page"><h2 data-en="Shop Settings & Security" data-hi="दुकान की सेटिंग और सुरक्षा">Shop Settings & Security</h2>
+<div class="panel grid"><label>Shop Name<input id="sName" value="SADRUN TRADERS"></label><label>Address<textarea id="sAddress"></textarea></label><label>Mobile<input id="sMobile"></label><label>GSTIN<input id="sGstin"></label><label>Bill Prefix<input id="sPrefix" value="ST/26-27/"></label><label>App PIN (4-8 digits)<input id="sPin" inputmode="numeric" maxlength="8" placeholder="Leave blank to disable"></label></div>
+<div class="actions"><button id="saveSettings">Save Settings</button><button id="lockNow" class="secondary">Lock App Now</button></div>
+<div class="notice">PIN is a basic local app lock, not enterprise-grade security. Keep your backup private.</div>
+</section>
+</main>
+
+<dialog id="invoice"><div id="printContent" class="invoice"></div><div id="invoiceActions" class="actions"><button onclick="window.print()">Print / Save PDF</button><button class="secondary" id="closeInvoice">Close</button></div></dialog>
+<dialog id="scanner"><h3>Barcode Camera Scanner</h3><video id="video" autoplay playsinline style="width:100%;max-height:55vh;background:#111;border-radius:8px"></video><p class="small" id="cameraMessage">Camera permission is required. Camera barcode detection depends on browser support.</p><button id="stopCamera" class="secondary">Close Scanner</button></dialog>
+<dialog id="pinDialog"><h3>Enter App PIN</h3><input id="pinEntry" type="password" inputmode="numeric" maxlength="8" placeholder="PIN"><div class="actions"><button id="unlockBtn">Unlock</button></div></dialog>
+
+<script>
+(()=>{'use strict';
+const $=id=>document.getElementById(id),fmt=n=>'₹'+(Number(n)||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const KEY='sadrun_offline_db_v2',OLD='sadrun_offline_db_v1';let db,cart=[],editCode=null,lang='en',stream=null,scanLoop=false;
+const empty=()=>({products:[],bills:[],purchases:[],payments:[],entries:[],settings:{name:'SADRUN TRADERS',prefix:'ST/26-27/',pin:''}});
+try{db=JSON.parse(localStorage.getItem(KEY))||JSON.parse(localStorage.getItem(OLD))||empty()}catch{db=empty()}
+db={...empty(),...db,settings:{...empty().settings,...(db.settings||{})},entries:db.entries||[]};
+function persist(){localStorage.setItem(KEY,JSON.stringify(db));render()}
+function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function dateVal(v){try{return new Date(v).toLocaleDateString('en-IN')}catch{return ''}}
+function page(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id))}
+document.querySelectorAll('[data-page]').forEach(b=>b.onclick=()=>page(b.dataset.page));document.querySelectorAll('[data-jump]').forEach(b=>b.onclick=()=>page(b.dataset.jump));
+function setLang(v){lang=v;document.documentElement.lang=v==='hi'?'hi':'en';$('langBtn').textContent=v==='en'?'हिंदी':'English';document.querySelectorAll('[data-en][data-hi]').forEach(el=>{let text=el.dataset[v];if(text){let input=el.querySelector('input,select,textarea');if(input){let labelText=[...el.childNodes].find(n=>n.nodeType===3);if(labelText)labelText.textContent=text}else if(el.children.length===0)el.textContent=text}});localStorage.setItem('sadrun_lang',v)}
+$('langBtn').onclick=()=>setLang(lang==='en'?'hi':'en');
+function customerBalances(){let map={};db.bills.forEach(b=>{let k=(b.customer||'').trim()+'|'+(b.mobile||'');if(!map[k])map[k]={name:b.customer,phone:b.mobile,due:0,payments:0};map[k].due+=Number(b.due)||0});db.payments.forEach(p=>{let k=(p.customer||'').trim()+'|'+(p.phone||'');if(map[k]){map[k].due-=Number(p.amount)||0;map[k].payments++}});return Object.values(map).map(x=>({...x,due:Math.max(0,x.due)}))}
+function render(){
+let today=new Date().toDateString(),tod=db.bills.filter(b=>new Date(b.date).toDateString()===today);
+$('todaySales').textContent=fmt(tod.reduce((s,b)=>s+(+b.total||0),0));$('billCount').textContent=tod.length;$('productCount').textContent=db.products.length;
+$('totalDue').textContent=fmt(customerBalances().reduce((s,c)=>s+c.due,0));
+let profit=db.bills.reduce((s,b)=>s+(b.items||[]).reduce((z,x)=>z+(x.rate-x.cost)*x.qty,0)-(+b.discount||0),0);
+$('grossProfit').textContent=fmt(profit);let low=db.products.filter(p=>(+p.stock||0)<=(+p.min||0));$('lowCount').textContent=low.length;
+$('lowStockList').innerHTML=low.map(p=>`<div>${safe(p.name)} (${safe(p.code)}) — <span class="low">${p.stock} ${safe(p.unit)}</span></div>`).join('')||'No low-stock items';
+$('recentBills').innerHTML=db.bills.slice(-8).reverse().map(b=>`<tr><td>${safe(b.id)}</td><td>${safe(b.customer)}</td><td>${dateVal(b.date)}</td><td>${fmt(b.total)}</td><td>${fmt(b.due)}</td></tr>`).join('')||'<tr><td colspan="5">No bills yet</td></tr>';
+let q=$('productFilter').value.toLowerCase();$('productRows').innerHTML=db.products.filter(p=>(p.name+' '+p.code).toLowerCase().includes(q)).map(p=>`<tr><td>${safe(p.code)}</td><td>${safe(p.name)}</td><td>${safe(p.category)}</td><td>${fmt(p.rate)}</td><td>${p.stock} ${safe(p.unit)} ${p.stock<=p.min?'<span class="low">Low</span>':''}</td><td><button class="secondary" data-edit="${safe(p.code)}">Edit</button> <button class="danger" data-del="${safe(p.code)}">×</button></td></tr>`).join('')||'<tr><td colspan="6">No products</td></tr>';
+$('purchaseProduct').innerHTML=db.products.map(p=>`<option value="${safe(p.code)}">${safe(p.name)} (${safe(p.code)})</option>`).join('');
+$('purchaseRows').innerHTML=db.purchases.slice(-30).reverse().map(p=>`<tr><td>${dateVal(p.date)}</td><td>${safe(p.supplier)}</td><td>${safe(p.name)}</td><td>${p.qty}</td><td>${fmt(p.total)}</td></tr>`).join('')||'<tr><td colspan="5">No purchase records</td></tr>';
+$('ledgerRows').innerHTML=customerBalances().map(c=>`<tr><td>${safe(c.name)}</td><td>${safe(c.phone)}</td><td>${fmt(c.due)}</td><td>${c.payments}</td></tr>`).join('')||'<tr><td colspan="4">No customer records</td></tr>';
+$('salesRows').innerHTML=db.bills.slice(-50).reverse().map(b=>`<tr><td>${safe(b.id)}</td><td>${safe(b.customer)}</td><td>${dateVal(b.date)}</td><td>${fmt(b.total)}</td><td>${fmt(b.due)}</td><td><button class="secondary" data-reprint="${safe(b.id)}">View</button></td></tr>`).join('')||'<tr><td colspan="6">No sales yet</td></tr>';
+$('accountRows').innerHTML=db.entries.slice(-50).reverse().map(e=>`<tr><td>${dateVal(e.date)}</td><td>${safe(e.type)}</td><td>${safe(e.category)}</td><td>${safe(e.mode)}</td><td>${fmt(e.amount)}</td><td>${safe(e.note)}</td></tr>`).join('')||'<tr><td colspan="6">No entries</td></tr>';
+let sales=db.bills.reduce((s,b)=>s+b.total,0),purchases=db.purchases.reduce((s,p)=>s+p.total,0),expenses=db.entries.filter(e=>e.type==='expense').reduce((s,e)=>s+e.amount,0),income=db.entries.filter(e=>e.type==='income').reduce((s,e)=>s+e.amount,0);
+$('reportSummary').innerHTML=`Total Sales: <b>${fmt(sales)}</b><br>Total Purchase: <b>${fmt(purchases)}</b><br>Other Income: <b>${fmt(income)}</b><br>Expenses: <b>${fmt(expenses)}</b><br>Estimated Gross Profit: <b>${fmt(profit)}</b><br>Estimated Net (before other adjustments): <b>${fmt(profit+income-expenses)}</b><br>Stock Cost: <b>${fmt(db.products.reduce((s,p)=>s+p.stock*p.cost,0))}</b><br>Total Bills: <b>${db.bills.length}</b><br>Products: <b>${db.products.length}</b>`;
+let s=db.settings;$('shopTitle').textContent=s.name||'SADRUN TRADERS';$('sName').value=s.name||'';$('sAddress').value=s.address||'';$('sMobile').value=s.mobile||'';$('sGstin').value=s.gstin||'';$('sPrefix').value=s.prefix||'ST/';$('sPin').value=s.pin||'';
+}
+function clearProductForm(){ $('pCode').disabled=false;['pCode','pName','pCost','pRate','pHsn'].forEach(id=>$(id).value='');$('pUnit').value='Piece';$('pTax').value='0';$('pStock').value='0';$('pMin').value='5';editCode=null;$('saveProduct').textContent='Save Product'}
+$('saveProduct').onclick=()=>{let p={code:$('pCode').value.trim(),name:$('pName').value.trim(),category:$('pCat').value,unit:$('pUnit').value||'Piece',cost:+$('pCost').value,rate:+$('pRate').value,tax:+$('pTax').value,stock:+$('pStock').value,min:+$('pMin').value,hsn:$('pHsn').value.trim()};if(!p.code||!p.name)return alert('Barcode/code and product name are required');if([p.cost,p.rate,p.stock,p.tax,p.min].some(x=>x<0||!Number.isFinite(x)))return alert('Enter valid non-negative numbers');let old=db.products.find(x=>x.code===p.code);if(old&&!editCode)return alert('This barcode/code already exists');if(editCode){let i=db.products.findIndex(x=>x.code===editCode);if(i<0)return alert('Product not found');db.products[i]={...p,stock:p.stock}}else db.products.push(p);clearProductForm();persist();alert('Product saved')};
+$('cancelEdit').onclick=clearProductForm;$('productFilter').oninput=render;
+$('productRows').onclick=e=>{let ed=e.target.dataset.edit,del=e.target.dataset.del;if(ed){let p=db.products.find(x=>x.code===ed);if(!p)return;editCode=ed;$('pCode').value=p.code;$('pCode').disabled=true;$('pName').value=p.name;$('pCat').value=p.category;$('pUnit').value=p.unit;$('pCost').value=p.cost;$('pRate').value=p.rate;$('pTax').value=p.tax;$('pStock').value=p.stock;$('pMin').value=p.min??5;$('pHsn').value=p.hsn;$('saveProduct').textContent='Update Product'}if(del&&confirm('Delete this product?')){if(db.bills.some(b=>(b.items||[]).some(x=>x.code===del)))return alert('Product is used in a saved bill. Keep it to preserve history.');db.products=db.products.filter(p=>p.code!==del);persist()}};
+$('itemSearch').oninput=()=>{let q=$('itemSearch').value.toLowerCase();$('matches').innerHTML=q?db.products.filter(p=>(p.name+' '+p.code).toLowerCase().includes(q)).slice(0,15).map(p=>`<button data-add="${safe(p.code)}">${safe(p.name)} · ${safe(p.code)} · ${fmt(p.rate)} · Stock ${p.stock}</button>`).join(''):''};
+$('itemSearch').onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();let code=$('itemSearch').value.trim(),p=db.products.find(x=>x.code===code);if(p)addCart(code);else{let first=$('matches').querySelector('[data-add]');if(first)addCart(first.dataset.add)}}};
+$('matches').onclick=e=>{let code=e.target.dataset.add;if(code)addCart(code)};
+function addCart(code){let p=db.products.find(x=>x.code===code);if(!p)return;let x=cart.find(x=>x.code===code);if(x)x.qty+=1;else cart.push({...p,qty:1});$('itemSearch').value='';$('matches').innerHTML='';drawCart()}
+function drawCart(){let sub=0,tax=0;$('cartRows').innerHTML=cart.map((p,i)=>{let a=p.rate*p.qty,t=a*p.tax/100;sub+=a;tax+=t;return `<tr><td>${safe(p.name)}</td><td>${fmt(p.rate)}</td><td><input style="width:78px" type="number" min=".001" step=".001" value="${p.qty}" data-qty="${i}"></td><td>${p.tax}%</td><td>${fmt(a+t)}</td><td><button class="danger" data-remove="${i}">×</button></td></tr>`}).join('')||'<tr><td colspan="6">Scan barcode or search a product above</td></tr>';let total=Math.max(0,sub+tax-(+$('discount').value||0));$('subTotal').textContent=fmt(sub);$('taxTotal').textContent=fmt(tax);$('grandTotal').textContent=fmt(total)}
+$('cartRows').onchange=e=>{let i=e.target.dataset.qty;if(i!==undefined){cart[+i].qty=Math.max(.001,+e.target.value||.001);drawCart()}};$('cartRows').onclick=e=>{let i=e.target.dataset.remove;if(i!==undefined){cart.splice(+i,1);drawCart()}};$('discount').oninput=drawCart;$('clearCart').onclick=()=>{cart=[];drawCart()};
+$('saveBill').onclick=()=>{if(!cart.length)return alert('Add at least one product');for(let x of cart){let p=db.products.find(p=>p.code===x.code);if(!p||p.stock<x.qty)return alert(x.name+' — insufficient stock');}
+let subtotal=cart.reduce((s,x)=>s+x.rate*x.qty,0),tax=cart.reduce((s,x)=>s+x.rate*x.qty*x.tax/100,0),discount=Math.min(subtotal+tax,Math.max(0,+$('discount').value||0)),total=subtotal+tax-discount,received=Math.min(total,Math.max(0,+$('received').value||0));
+let bill={id:(db.settings.prefix||'ST/')+String(db.bills.length+1).padStart(5,'0'),date:new Date().toISOString(),customer:$('custName').value.trim()||'Cash Customer',mobile:$('custPhone').value.trim(),mode:$('payMode').value,items:cart.map(x=>({...x})),subtotal,tax,discount,total,received,due:total-received};
+cart.forEach(x=>db.products.find(p=>p.code===x.code).stock-=x.qty);db.bills.push(bill);persist();showInvoice(bill);cart=[];drawCart();$('custName').value='';$('custPhone').value='';$('received').value='0';$('discount').value='0'};
+function showInvoice(b){let s=db.settings;$('printContent').innerHTML=`<h2>${safe(s.name||'SADRUN TRADERS')}</h2><center>${safe(s.address||'')}<br>${safe(s.mobile||'')}<br>${s.gstin?'GSTIN: '+safe(s.gstin):''}</center><h3>SALES INVOICE</h3><p>Bill: ${safe(b.id)}<br>Date: ${new Date(b.date).toLocaleString('en-IN')}<br>Customer: ${safe(b.customer)} ${safe(b.mobile)}</p><table><tr><th>Item</th><th>Qty</th><th>Rate</th><th>GST</th><th>Amount</th></tr>${b.items.map(x=>`<tr><td>${safe(x.name)}</td><td>${x.qty} ${safe(x.unit)}</td><td>${fmt(x.rate)}</td><td>${x.tax}%</td><td>${fmt(x.qty*x.rate*(1+x.tax/100))}</td></tr>`).join('')}</table><div class="sum">Subtotal: ${fmt(b.subtotal)}<br>GST: ${fmt(b.tax)}<br>Discount: ${fmt(b.discount)}<br><b>Total: ${fmt(b.total)}</b><br>Received: ${fmt(b.received)}<br>Due: ${fmt(b.due)}<br>Payment: ${safe(b.mode)}</div><center><p>Thank you! Visit again.</p></center>`;$('invoice').showModal()}
+$('salesRows').onclick=e=>{let id=e.target.dataset.reprint;if(id){let b=db.bills.find(x=>x.id===id);if(b)showInvoice(b)}};
+$('closeInvoice').onclick=()=>$('invoice').close();
+$('savePurchase').onclick=()=>{let p=db.products.find(x=>x.code===$('purchaseProduct').value),qty=+$('purchaseQty').value,rate=+$('purchaseRate').value;if(!p||qty<=0||rate<0||!Number.isFinite(qty+rate))return alert('Enter valid product, quantity and rate');p.stock+=qty;p.cost=rate;db.purchases.push({date:$('purchaseDate').value?new Date($('purchaseDate').value+'T12:00:00').toISOString():new Date().toISOString(),supplier:$('supplier').value.trim(),invoice:$('supplierBill').value.trim(),code:p.code,name:p.name,qty,rate,total:qty*rate});persist();alert('Purchase saved and stock updated')};
+$('addPayment').onclick=()=>{let customer=$('ledgerName').value.trim(),phone=$('ledgerPhone').value.trim(),amount=+$('ledgerAmount').value;if(!customer||amount<=0)return alert('Enter customer name and payment amount');db.payments.push({date:new Date().toISOString(),customer,phone,amount,note:$('ledgerNote').value});persist();['ledgerName','ledgerPhone','ledgerAmount','ledgerNote'].forEach(id=>$(id).value='');alert('Payment saved')};
+$('saveEntry').onclick=()=>{let amount=+$('entryAmount').value;if(amount<=0)return alert('Enter a valid amount');db.entries.push({type:$('entryType').value,category:$('entryCategory').value.trim(),amount,mode:$('entryMode').value,note:$('entryNote').value,date:$('entryDate').value?new Date($('entryDate').value+'T12:00:00').toISOString():new Date().toISOString()});persist();['entryCategory','entryAmount','entryNote'].forEach(id=>$(id).value='');alert('Entry saved')};
+$('saveSettings').onclick=()=>{let pin=$('sPin').value.trim();if(pin&&(!/^[0-9]{4,8}$/.test(pin)))return alert('PIN must be 4 to 8 digits');db.settings={name:$('sName').value.trim()||'SADRUN TRADERS',address:$('sAddress').value,mobile:$('sMobile').value,gstin:$('sGstin').value,prefix:$('sPrefix').value||'ST/',pin};persist();alert('Settings saved')};
+$('lockNow').onclick=()=>{if(db.settings.pin){$('pinEntry').value='';$('pinDialog').showModal()}else alert('Set a PIN first in Settings')};
+$('unlockBtn').onclick=()=>{if($('pinEntry').value===db.settings.pin)$('pinDialog').close();else alert('Incorrect PIN')};
+function download(name,data,type){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([data],{type}));a.href=u;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),1500)}
+$('backup').onclick=()=>download('SADRUN_TRADERS_BACKUP_'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify(db,null,2),'application/json');
+$('restore').onchange=async e=>{try{if(!e.target.files[0])return;let x=JSON.parse(await e.target.files[0].text());if(!Array.isArray(x.products)||!Array.isArray(x.bills)||!Array.isArray(x.purchases))throw Error();if(confirm('Replace current app data with this backup? Download a backup first.')){db={...empty(),...x,settings:{...empty().settings,...x.settings},entries:x.entries||[]};persist();alert('Backup restored')}}catch{alert('Invalid backup file')}e.target.value=''};
+$('exportCsv').onclick=()=>{let rows=[['code','name','category','unit','cost','rate','tax','stock','min_stock','hsn'],...db.products.map(p=>[p.code,p.name,p.category,p.unit,p.cost,p.rate,p.tax,p.stock,p.min,p.hsn])];let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');download('SADRUN_PRODUCTS.csv',csv,'text/csv;charset=utf-8')};
+$('exportBills').onclick=()=>{let rows=[['bill','date','customer','mobile','payment_mode','subtotal','tax','discount','total','received','due'],...db.bills.map(b=>[b.id,b.date,b.customer,b.mobile,b.mode,b.subtotal,b.tax,b.discount,b.total,b.received,b.due])];let csv='\ufeff'+rows.map(r=>r.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');download('SADRUN_SALES.csv',csv,'text/csv;charset=utf-8')};
+async function stopScan(){scanLoop=false;if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}if($('scanner').open)$('scanner').close()}
+$('cameraBtn').onclick=async()=>{if(!('BarcodeDetector'in window)){alert('Camera barcode scanning is not supported in this browser. Use a USB/Bluetooth scanner or type/scan into the barcode search field.');return}try{let detector=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','code_39','itf','qr_code']});stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});$('video').srcObject=stream;$('scanner').showModal();scanLoop=true;async function tick(){if(!scanLoop)return;try{let codes=await detector.detect($('video'));if(codes.length){let value=codes[0].rawValue;$('itemSearch').value=value;await stopScan();let p=db.products.find(x=>x.code===value);if(p)addCart(value);else{$('itemSearch').dispatchEvent(new Event('input'));$('scanStatus').textContent='Scanned: '+value}return}}catch{}requestAnimationFrame(tick)}tick()}catch(err){alert('Camera could not start. Check camera permission and use HTTPS/PWA.')}};
+$('stopCamera').onclick=stopScan;
+setLang(localStorage.getItem('sadrun_lang')||'en');render();drawCart();
+if(db.settings.pin){$('pinEntry').value='';$('pinDialog').showModal()}
+})();
+</script>
+</body></html>
