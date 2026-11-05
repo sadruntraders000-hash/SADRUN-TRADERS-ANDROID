@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#123b32">
+<title>SADRUN TRADERS | Business Manager</title>
+<style>
+:root{--green:#123b32;--green2:#1d6654;--gold:#e9b85b;--bg:#f3f6f4;--card:#fff;--text:#182522;--muted:#71807b;--line:#e1e9e5;--red:#b83b3b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:14px/1.45 Arial,Helvetica,sans-serif}
+header{background:linear-gradient(120deg,#102e29,#1d6654);color:#fff;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:12px}.logo{width:42px;height:42px;border:1px solid #ffffff55;border-radius:12px;display:grid;place-items:center;font-weight:800;color:var(--gold);font-size:18px}.brand h1{font-size:18px;margin:0;letter-spacing:1px}.brand p{margin:3px 0 0;color:#d5e5df;font-size:11px;letter-spacing:1.5px}
+.header-actions{display:flex;gap:8px;flex-wrap:wrap}button,.btn{border:0;border-radius:8px;padding:10px 13px;background:var(--green2);color:white;font-weight:700;cursor:pointer}button.secondary,.btn.secondary{background:#edf3f0;color:var(--green);border:1px solid var(--line)}button.gold{background:var(--gold);color:#2c2618}button.danger{background:#fff0f0;color:var(--red);border:1px solid #f0d2d2}
+.layout{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 78px)}nav{background:#fff;border-right:1px solid var(--line);padding:16px 12px}nav button{display:flex;width:100%;text-align:left;gap:10px;align-items:center;background:transparent;color:#52615b;margin:3px 0;padding:12px;font-weight:600}nav button.active,nav button:hover{background:#eaf3ef;color:var(--green)}main{padding:22px;max-width:1500px;width:100%;margin:auto}.page{display:none}.page.active{display:block}.page-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}.page-head h2{margin:0;font-size:23px}.muted{color:var(--muted)}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin-bottom:18px}.metric,.panel{background:var(--card);border:1px solid var(--line);border-radius:13px;padding:16px;box-shadow:0 2px 8px #183b2c08}.metric small{color:var(--muted)}.metric strong{display:block;font-size:24px;margin-top:7px}.panel{margin-bottom:16px}.panel h3{margin:0 0 14px;font-size:16px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:15px}.formgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.field{display:flex;flex-direction:column;gap:5px}.field.full{grid-column:1/-1}label{font-size:12px;font-weight:700;color:#53615b}input,select,textarea{width:100%;padding:10px;border:1px solid #d8e2dd;border-radius:8px;background:#fff;color:var(--text);font:inherit}input:focus,select:focus{outline:2px solid #c2ded2;border-color:var(--green2)}.row{display:flex;gap:9px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row .fixed{flex:0 0 auto}.table-wrap{overflow:auto}table{width:100%;border-collapse:collapse;min-width:650px}th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:middle}th{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;background:#f8faf9}td input{min-width:65px;padding:7px}.right{text-align:right}.pill{display:inline-block;border-radius:20px;padding:4px 8px;background:#edf5f1;color:#24634f;font-size:11px;font-weight:700}.pill.warn{background:#fff5e5;color:#986514}.totals{margin-left:auto;max-width:360px}.total-line{display:flex;justify-content:space-between;padding:6px 0}.grand{font-size:20px;font-weight:800;border-top:1px solid var(--line);margin-top:5px;padding-top:11px}.notice{background:#fff8e9;border:1px solid #f1dfb8;color:#74531a;padding:11px;border-radius:9px;font-size:12px;margin:10px 0}.empty{padding:25px;text-align:center;color:var(--muted)}.hidden{display:none!important}.paybox{display:grid;grid-template-columns:1fr 1fr;gap:12px}.paybox .field{background:#f8faf9;padding:12px;border-radius:9px}.due{color:var(--red);font-weight:800}.positive{color:#16704f;font-weight:700}.small{font-size:12px}.footer{padding:20px;text-align:center;color:var(--muted);font-size:11px}
+@media(max-width:850px){.layout{grid-template-columns:1fr}nav{display:flex;overflow:auto;gap:4px;border-right:0;border-bottom:1px solid var(--line);padding:8px}nav button{width:auto;white-space:nowrap;padding:9px}.cards{grid-template-columns:repeat(2,1fr)}main{padding:14px}.grid2{grid-template-columns:1fr}}
+@media(max-width:480px){.formgrid,.paybox{grid-template-columns:1fr}.cards{gap:8px}.metric{padding:12px}.metric strong{font-size:19px}}
+@media print{header,nav,.no-print,.page-head button{display:none!important}.layout{display:block}main{padding:0}.page{display:none!important}#invoicePrint{display:block!important}.panel{box-shadow:none;border:0}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand"><div class="logo">ST</div><div><h1>SADRUN TRADERS</h1><p>BUSINESS MANAGEMENT SYSTEM</p></div></div>
+ <div class="header-actions"><button class="secondary" onclick="exportBackup()">Export Backup</button><button class="gold" onclick="document.getElementById('restoreFile').click()">Restore Backup</button><input id="restoreFile" type="file" accept=".json" class="hidden" onchange="restoreBackup(event)"></div>
+</header>
+<div class="layout">
+<nav class="no-print">
+ <button class="active" data-page="dashboard">▦ Dashboard</button>
+ <button data-page="billing">▤ Billing & Invoices</button>
+ <button data-page="items">▣ Items & Stock</button>
+ <button data-page="purchases">＋ Purchases</button>
+ <button data-page="parties">♙ Customers & Suppliers</button>
+ <button data-page="ledger">⇄ Accounts & Dues</button>
+ <button data-page="reports">▥ Profit & Loss</button>
+ <button data-page="import">⇧ Bulk Import</button>
+ <button data-page="settings">⚙ Settings</button>
+</nav>
+<main>
+<section id="dashboard" class="page active">
+ <div class="page-head"><div><h2>Dashboard</h2><div class="muted">Your business at a glance</div></div><button onclick="showPage('billing')">＋ New Invoice</button></div>
+ <div class="cards">
+  <div class="metric"><small>Sales Recorded</small><strong id="mSales">₹0.00</strong></div>
+  <div class="metric"><small>Cash Received</small><strong id="mCash">₹0.00</strong></div>
+  <div class="metric"><small>Online Received</small><strong id="mOnline">₹0.00</strong></div>
+  <div class="metric"><small>Customer Dues</small><strong id="mDue">₹0.00</strong></div>
+ </div>
+ <div class="grid2"><div class="panel"><h3>Quick Actions</h3><div class="row"><button onclick="showPage('billing')">Create Invoice</button><button class="secondary" onclick="showPage('items')">Add Item</button></div><div class="row" style="margin-top:9px"><button class="secondary" onclick="showPage('purchases')">Record Purchase</button><button class="secondary" onclick="showPage('import')">Bulk Import Items</button></div></div>
+ <div class="panel"><h3>Important Notes</h3><div class="small muted">This version stores records on this device using browser storage. Export backups regularly. Cloud sync must be connected to a secure backend before multi-device syncing is available.</div></div></div>
+ <div class="panel"><h3>Recent Invoices</h3><div id="recentInvoices" class="table-wrap"></div></div>
+</section>
+
+<section id="billing" class="page">
+ <div class="page-head"><div><h2>Create Sales Invoice</h2><div class="muted">English interface · GST or non-GST billing</div></div><button class="secondary" onclick="resetBill()">Clear Bill</button></div>
+ <div class="panel">
+  <div class="formgrid">
+   <div class="field"><label>Invoice Number</label><input id="invNo" readonly></div>
+   <div class="field"><label>Invoice Date</label><input id="invDate" type="date"></div>
+   <div class="field"><label>Customer</label><select id="billCustomer"><option value="">Walk-in Customer</option></select></div>
+   <div class="field"><label>Billing Type</label><select id="taxMode" onchange="renderBill()"><option value="gst">GST Invoice</option><option value="none">Without GST (Non-GST)</option></select></div>
+  </div>
+ </div>
+ <div class="panel"><h3>Items</h3>
+  <div class="row"><div class="field"><label>Select Item</label><select id="billItem"></select></div><div class="field fixed" style="max-width:110px"><label>Quantity</label><input id="billQty" type="number" min="0.01" step="0.01" value="1"></div><button class="fixed" onclick="addBillItem()">Add Item</button></div>
+  <div class="table-wrap" id="billTable"></div>
+ </div>
+ <div class="panel">
+  <h3>Payment Collection</h3>
+  <div class="paybox">
+   <div class="field"><label>Cash Received (₹)</label><input id="cashPaid" type="number" min="0" step="0.01" value="0" oninput="renderBill()"></div>
+   <div class="field"><label>Online Received (₹)</label><input id="onlinePaid" type="number" min="0" step="0.01" value="0" oninput="renderBill()"></div>
+  </div>
+  <div class="notice">Enter cash and online amounts separately. The total received is combined automatically; the remaining amount becomes the customer's due balance.</div>
+  <div class="totals" id="billTotals"></div>
+  <div class="row no-print" style="margin-top:14px"><button class="gold" onclick="saveInvoice()">Save Invoice & Update Stock</button><button class="secondary" onclick="previewInvoice()">Preview / Print</button></div>
+ </div>
+ <div id="invoicePrint" class="panel hidden"></div>
+</section>
+
+<section id="items" class="page">
+ <div class="page-head"><div><h2>Items & Stock</h2><div class="muted">Add, edit and maintain item quantities</div></div><button onclick="newItem()">＋ New Item</button></div>
+ <div class="panel" id="itemEditor"><h3 id="itemFormTitle">Add Item</h3><input id="editItemId" type="hidden"><div class="formgrid">
+  <div class="field"><label>Item Name</label><input id="itemName" placeholder="Product name"></div><div class="field"><label>SKU / Barcode</label><input id="itemSku" placeholder="SKU or barcode"></div>
+  <div class="field"><label>Purchase Price (₹)</label><input id="itemCost" type="number" min="0" step=".01"></div><div class="field"><label>Selling Price (₹)</label><input id="itemPrice" type="number" min="0" step=".01"></div>
+  <div class="field"><label>Opening / Current Stock</label><input id="itemStock" type="number" min="0" step=".01"></div><div class="field"><label>GST Rate (%)</label><input id="itemGst" type="number" min="0" max="100" value="0"></div>
+ </div><div class="row" style="margin-top:12px"><button onclick="saveItem()">Save Item</button><button class="secondary" onclick="newItem()">Cancel</button></div></div>
+ <div class="panel"><div class="row"><input id="itemSearch" placeholder="Search item name, SKU or barcode..." oninput="renderItems()"><button class="secondary fixed" onclick="printBarcodes()">Print Barcode Labels</button></div><div id="itemsTable" class="table-wrap"></div></div>
+ <div class="panel"><h3>Barcode Scanner</h3><div class="row"><input id="scanCode" placeholder="Scan or enter barcode / SKU"><button onclick="findBarcode()">Find Item</button></div><div id="scanResult" class="small muted"></div><div class="small muted">Camera scanning is supported on compatible browsers. Use a USB/Bluetooth scanner as keyboard input if available.</div><button class="secondary" style="margin-top:8px" onclick="startCameraScan()">Open Camera Scanner</button><video id="scannerVideo" class="hidden" style="width:100%;max-width:360px;margin-top:10px" autoplay playsinline></video></div>
+</section>
+
+<section id="purchases" class="page">
+ <div class="page-head"><div><h2>Purchase Entry</h2><div class="muted">Record supplier purchases and increase stock</div></div></div>
+ <div class="panel"><div class="formgrid"><div class="field"><label>Supplier</label><select id="purchaseSupplier"></select></div><div class="field"><label>Purchase Date</label><input id="purchaseDate" type="date"></div><div class="field"><label>Item</label><select id="purchaseItem"></select></div><div class="field"><label>Quantity</label><input id="purchaseQty" type="number" min=".01" value="1"></div><div class="field"><label>Unit Cost (₹)</label><input id="purchaseCost" type="number" min="0" step=".01"></div><div class="field"><label>Payment Made (₹)</label><input id="purchasePaid" type="number" min="0" step=".01" value="0"></div></div><button style="margin-top:12px" onclick="savePurchase()">Save Purchase</button></div>
+ <div class="panel"><h3>Purchase History</h3><div id="purchaseTable" class="table-wrap"></div></div>
+</section>
+
+<section id="parties" class="page">
+ <div class="page-head"><div><h2>Customers & Suppliers</h2><div class="muted">Maintain contact details and opening balances</div></div></div>
+ <div class="panel"><h3>Add Customer / Supplier</h3><div class="formgrid"><div class="field"><label>Party Type</label><select id="partyType"><option>Customer</option><option>Supplier</option></select></div><div class="field"><label>Name</label><input id="partyName"></div><div class="field"><label>Phone</label><input id="partyPhone" inputmode="tel"></div><div class="field"><label>GSTIN (optional)</label><input id="partyGstin"></div><div class="field"><label>Opening Due (₹)</label><input id="partyOpening" type="number" min="0" value="0"></div></div><button style="margin-top:12px" onclick="saveParty()">Save Party</button></div>
+ <div class="grid2"><div class="panel"><h3>Customers</h3><div id="customersTable"></div></div><div class="panel"><h3>Suppliers</h3><div id="suppliersTable"></div></div></div>
+</section>
+
+<section id="ledger" class="page">
+ <div class="page-head"><div><h2>Accounts & Dues</h2><div class="muted">Outstanding balances and payment history</div></div></div>
+ <div class="panel"><h3>Customer Ledger</h3><div id="ledgerTable" class="table-wrap"></div></div>
+ <div class="panel"><h3>Record Customer Payment</h3><div class="formgrid"><div class="field"><label>Customer</label><select id="ledgerCustomer"></select></div><div class="field"><label>Payment Amount (₹)</label><input id="ledgerAmount" type="number" min=".01" step=".01"></div><div class="field"><label>Payment Mode</label><select id="ledgerMode"><option>Cash</option><option>Online</option></select></div><div class="field"><label>Date</label><input id="ledgerDate" type="date"></div></div><button style="margin-top:12px" onclick="recordPayment()">Save Payment</button></div>
+ <div class="panel"><h3>Payment History</h3><div id="paymentTable" class="table-wrap"></div></div>
+</section>
+
+<section id="reports" class="page">
+ <div class="page-head"><div><h2>Profit & Loss</h2><div class="muted">Summary from recorded sales and purchases</div></div></div>
+ <div class="cards"><div class="metric"><small>Sales (before tax)</small><strong id="rSales">₹0</strong></div><div class="metric"><small>Cost of Goods Sold</small><strong id="rCogs">₹0</strong></div><div class="metric"><small>Gross Profit</small><strong id="rProfit">₹0</strong></div><div class="metric"><small>Purchase Value</small><strong id="rPurchase">₹0</strong></div></div>
+ <div class="notice">This is a basic operational estimate. It excludes operating expenses, tax adjustments, returns, depreciation and other accounting entries. Use a qualified accountant for statutory books and tax filing.</div>
+</section>
+
+<section id="import" class="page">
+ <div class="page-head"><div><h2>Bulk Item Import</h2><div class="muted">Upload a spreadsheet or document to prepare multiple stock items</div></div></div>
+ <div class="panel"><h3>Upload Item List</h3><p class="small muted">For reliable bulk import, use a CSV file with columns: name, sku, cost, price, stock, gst. You can also upload a JSON backup exported from this app.</p><input id="bulkFile" type="file" accept=".csv,.txt,.json,.pdf,image/*"><div id="fileInfo" class="small muted" style="margin-top:10px"></div><div class="notice">PDF and image files can be selected and previewed here, but automatic OCR extraction is not enabled in this offline starter. Review and enter extracted details before saving. Do not import unverified quantities or prices.</div><div id="importPreview"></div><button style="margin-top:12px" onclick="importCsv()">Import CSV Items</button></div>
+ <div class="panel"><h3>CSV Format Example</h3><pre style="white-space:pre-wrap;background:#f7faf8;padding:12px;border-radius:8px">name,sku,cost,price,stock,gst
+Urea 45kg,UREA45,260,270,100,5
+DAP 50kg,DAP50,1200,1350,25,5</pre><button class="secondary" onclick="downloadSample()">Download CSV Sample</button></div>
+</section>
+
+<section id="settings" class="page">
+ <div class="page-head"><div><h2>Settings</h2><div class="muted">Business details and data management</div></div></div>
+ <div class="panel"><h3>Business Details</h3><div class="formgrid"><div class="field"><label>Business Name</label><input id="bizName" value="SADRUN TRADERS"></div><div class="field"><label>Phone</label><input id="bizPhone"></div><div class="field"><label>Address</label><input id="bizAddress" placeholder="Business address"></div><div class="field"><label>GSTIN</label><input id="bizGstin"></div></div><button style="margin-top:12px" onclick="saveSettings()">Save Settings</button></div>
+ <div class="panel"><h3>Cloud Backup & Sync</h3><span class="pill warn">Not connected</span><p class="small muted">Your records are saved locally on this browser/device. True cloud sync requires a secure backend account and configuration (for example, Firebase or Supabase). Do not put secret API keys in this HTML file. Until cloud sync is configured, use Export Backup and keep a copy in a safe place.</p><button class="secondary" onclick="exportBackup()">Export Data Backup</button></div>
+ <div class="panel"><h3>Data Safety</h3><button class="danger" onclick="if(confirm('Delete all locally stored business data? Export a backup first.')){localStorage.removeItem(KEY);location.reload()}">Clear All Local Data</button></div>
+</section>
+<div class="footer">SADRUN TRADERS · English Edition · Local-first starter application</div>
+</main>
+</div>
+<script>
+const KEY='sadrun_traders_v2';
+let db=JSON.parse(localStorage.getItem(KEY)||'null')||{items:[],parties:[],invoices:[],purchases:[],payments:[],settings:{}};
+let bill=[];
+const money=n=>'₹'+Number(n||0).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=id=>Number(document.getElementById(id).value||0);
+const today=()=>new Date().toISOString().slice(0,10);
+function persist(){localStorage.setItem(KEY,JSON.stringify(db));refreshAll()}
+function showPage(id){document.querySelectorAll('.page').forEach(x=>x.classList.toggle('active',x.id===id));document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x.dataset.page===id));if(id==='billing')renderBill();window.scrollTo(0,0)}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>showPage(b.dataset.page));
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+function nextInv(){return 'ST-'+new Date().getFullYear()+'-'+String(db.invoices.length+1).padStart(4,'0')}
+function init(){document.getElementById('invNo').value=nextInv();document.getElementById('invDate').value=today();document.getElementById('purchaseDate').value=today();document.getElementById('ledgerDate').value=today();refreshAll()}
+function refreshAll(){renderDashboard();renderItems();renderParties();renderPurchases();renderLedger();renderReports();fillSelects();if(document.getElementById('invNo'))document.getElementById('invNo').value=nextInv()}
+function fillSelects(){const opts=(arr,first)=>first+arr.map(x=>`<option value="${x.id}">${esc(x.name)}</option>`).join('');document.getElementById('billCustomer').innerHTML=opts(db.parties.filter(p=>p.type==='Customer'),'<option value="">Walk-in Customer</option>');document.getElementById('ledgerCustomer').innerHTML=opts(db.parties.filter(p=>p.type==='Customer'),'<option value="">Select customer</option>');document.getElementById('purchaseSupplier').innerHTML=opts(db.parties.filter(p=>p.type==='Supplier'),'<option value="">Select supplier</option>');let itemopts=opts(db.items,'<option value="">Select item</option>');document.getElementById('billItem').innerHTML=itemopts;document.getElementById('purchaseItem').innerHTML=itemopts}
+function renderDashboard(){let sales=db.invoices.reduce((s,i)=>s+i.total,0),cash=db.invoices.reduce((s,i)=>s+i.cash,0)+db.payments.filter(p=>p.mode==='Cash').reduce((s,p)=>s+p.amount,0),online=db.invoices.reduce((s,i)=>s+i.online,0)+db.payments.filter(p=>p.mode==='Online').reduce((s,p)=>s+p.amount,0),due=db.parties.filter(p=>p.type==='Customer').reduce((s,p)=>s+partyDue(p.id),0);mSales.textContent=money(sales);mCash.textContent=money(cash);mOnline.textContent=money(online);mDue.textContent=money(due);recentInvoices.innerHTML=table(['Invoice','Date','Customer','Total','Due'],db.invoices.slice(-6).reverse().map(i=>[i.no,i.date,i.customerName,money(i.total),money(i.due)]))}
+function table(head,rows){if(!rows.length)return '<div class="empty">No records found</div>';return '<table><thead><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead><tbody>'+rows.map(r=>'<tr>'+r.map(v=>'<td>'+v+'</td>').join('')+'</tr>').join('')+'</tbody></table>'}
+function newItem(){['editItemId','itemName','itemSku','itemCost','itemPrice','itemStock'].forEach(id=>document.getElementById(id).value='');itemGst.value=0;itemFormTitle.textContent='Add Item'}
+function saveItem(){let id=editItemId.value,name=itemName.value.trim();if(!name)return alert('Enter item name');let x={id:id||String(Date.now()),name,sku:itemSku.value.trim(),cost:num('itemCost'),price:num('itemPrice'),stock:num('itemStock'),gst:num('itemGst')};if(id)db.items[db.items.findIndex(a=>a.id===id)]=x;else db.items.push(x);newItem();persist()}
+function editItem(id){let x=db.items.find(a=>a.id===id);if(!x)return;editItemId.value=x.id;itemName.value=x.name;itemSku.value=x.sku;itemCost.value=x.cost;itemPrice.value=x.price;itemStock.value=x.stock;itemGst.value=x.gst;itemFormTitle.textContent='Edit Item';window.scrollTo(0,0)}
+function deleteItem(id){if(confirm('Delete this item?')){db.items=db.items.filter(x=>x.id!==id);persist()}}
+function renderItems(){let q=(itemSearch?.value||'').toLowerCase();let a=db.items.filter(x=>(x.name+' '+x.sku).toLowerCase().includes(q));itemsTable.innerHTML=table(['Item','SKU / Barcode','Cost','Selling Price','Stock','GST','Actions'],a.map(x=>[esc(x.name),esc(x.sku),money(x.cost),money(x.price),x.stock, x.gst+'%',`<button class="secondary" onclick="editItem('${x.id}')">Edit</button> <button class="danger" onclick="deleteItem('${x.id}')">Delete</button>`]))}
+function addBillItem(){let x=db.items.find(a=>a.id===billItem.value),q=num('billQty');if(!x||q<=0)return alert('Select an item and enter a valid quantity');let old=bill.find(a=>a.id===x.id);if(old)old.qty+=q;else bill.push({...x,qty:q});renderBill()}
+function billCalc(){let taxable=bill.reduce((s,x)=>s+x.price*x.qty,0),tax=document.getElementById('taxMode').value==='gst'?bill.reduce((s,x)=>s+x.price*x.qty*x.gst/100,0):0,total=taxable+tax,cash=num('cashPaid'),online=num('onlinePaid'),received=cash+online;return {taxable,tax,total,cash,online,received,due:Math.max(0,total-received),excess:Math.max(0,received-total)}}
+function renderBill(){billTable.innerHTML=table(['Item','Qty','Rate','GST','Amount',''],bill.map((x,i)=>[esc(x.name),`<input type="number" min=".01" step=".01" value="${x.qty}" onchange="bill[${i}].qty=Number(this.value);renderBill()">`,money(x.price),document.getElementById('taxMode').value==='gst'?x.gst+'%':'—',money(x.price*x.qty),`<button class="danger" onclick="bill.splice(${i},1);renderBill()">Remove</button>`]));let c=billCalc();billTotals.innerHTML=`<div class="total-line"><span>Subtotal</span><b>${money(c.taxable)}</b></div><div class="total-line"><span>GST</span><b>${money(c.tax)}</b></div><div class="total-line grand"><span>Grand Total</span><b>${money(c.total)}</b></div><div class="total-line"><span>Cash + Online Received</span><b>${money(c.received)}</b></div><div class="total-line"><span>Balance Due</span><b class="due">${money(c.due)}</b></div>${c.excess?'<div class="notice">Received amount is greater than invoice total. Please correct the payment.</div>':''}`}
+function saveInvoice(){if(!bill.length)return alert('Add at least one item');let c=billCalc();if(c.excess)return alert('Received amount cannot exceed invoice total');let customer=db.parties.find(p=>p.id===billCustomer.value),inv={id:String(Date.now()),no:invNo.value,date:invDate.value,customerId:customer?.id||'',customerName:customer?.name||'Walk-in Customer',taxMode:taxMode.value,lines:bill.map(x=>({id:x.id,name:x.name,qty:x.qty,price:x.price,cost:x.cost,gst:x.gst})),subtotal:c.taxable,tax:c.tax,total:c.total,cash:c.cash,online:c.online,due:c.due};db.invoices.push(inv);bill.forEach(x=>{let item=db.items.find(a=>a.id===x.id);if(item)item.stock-=x.qty});if(customer&&c.due>0)customer.balance=(customer.balance||0)+c.due;persist();showInvoice(inv);bill=[];cashPaid.value=0;onlinePaid.value=0;renderBill();alert('Invoice saved and stock updated.')}
+function showInvoice(i){invoicePrint.classList.remove('hidden');invoicePrint.innerHTML=`<div style="text-align:center"><h2>${esc(db.settings.name||'SADRUN TRADERS')}</h2><p>${esc(db.settings.address||'')} ${db.settings.phone?' | '+esc(db.settings.phone):''}</p><h3>${i.taxMode==='gst'?'TAX INVOICE':'INVOICE (WITHOUT GST)'}</h3></div><p><b>Invoice:</b> ${i.no} &nbsp; <b>Date:</b> ${i.date}<br><b>Customer:</b> ${esc(i.customerName)}</p>${table(['Item','Qty','Rate','Amount'],i.lines.map(x=>[esc(x.name),x.qty,money(x.price),money(x.qty*x.price)]))}<div class="totals"><div class="total-line"><span>Subtotal</span><b>${money(i.subtotal)}</b></div><div class="total-line"><span>GST</span><b>${money(i.tax)}</b></div><div class="total-line grand"><span>Grand Total</span><b>${money(i.total)}</b></div><div class="total-line"><span>Cash</span><b>${money(i.cash)}</b></div><div class="total-line"><span>Online</span><b>${money(i.online)}</b></div><div class="total-line"><span>Balance Due</span><b>${money(i.due)}</b></div></div><p style="margin-top:30px">Thank you for your business.</p><div class="no-print"><button onclick="window.print()">Print Invoice</button></div>`}
+function previewInvoice(){if(!bill.length)return alert('Add items first');let c=billCalc();showInvoice({no:invNo.value,date:invDate.value,customerName:db.parties.find(p=>p.id===billCustomer.value)?.name||'Walk-in Customer',taxMode:taxMode.value,lines:bill,subtotal:c.taxable,tax:c.tax,total:c.total,cash:c.cash,online:c.online,due:c.due})}
+function resetBill(){bill=[];cashPaid.value=0;onlinePaid.value=0;invoicePrint.classList.add('hidden');renderBill()}
+function saveParty(){let name=partyName.value.trim();if(!name)return alert('Enter party name');db.parties.push({id:String(Date.now()),type:partyType.value,name,phone:partyPhone.value,gstin:partyGstin.value,balance:num('partyOpening')});['partyName','partyPhone','partyGstin'].forEach(id=>document.getElementById(id).value='');partyOpening.value=0;persist()}
+function partyDue(id){let p=db.parties.find(x=>x.id===id);return p?.balance||0}
+function renderParties(){let cust=db.parties.filter(p=>p.type==='Customer'),supp=db.parties.filter(p=>p.type==='Supplier');customersTable.innerHTML=table(['Name','Phone','Opening / Current Due'],cust.map(p=>[esc(p.name),esc(p.phone),money(p.balance)]));suppliersTable.innerHTML=table(['Name','Phone','Balance'],supp.map(p=>[esc(p.name),esc(p.phone),money(p.balance)]))}
+function savePurchase(){let x=db.items.find(a=>a.id===purchaseItem.value),q=num('purchaseQty'),cost=num('purchaseCost');if(!x||q<=0)return alert('Select item and valid quantity');let total=q*cost,paid=num('purchasePaid');if(paid>total)return alert('Payment cannot exceed purchase total');x.stock+=q;x.cost=cost;db.purchases.push({date:purchaseDate.value,supplierId:purchaseSupplier.value,item:x.name,qty:q,cost,total,paid,due:total-paid});persist();alert('Purchase saved and stock increased')}
+function renderPurchases(){purchaseTable.innerHTML=table(['Date','Supplier','Item','Qty','Unit Cost','Total','Paid','Due'],db.purchases.slice().reverse().map(p=>[p.date,esc(db.parties.find(x=>x.id===p.supplierId)?.name||'—'),esc(p.item),p.qty,money(p.cost),money(p.total),money(p.paid),money(p.due)]))}
+function recordPayment(){let p=db.parties.find(x=>x.id===ledgerCustomer.value),a=num('ledgerAmount');if(!p||a<=0)return alert('Select customer and enter amount');if(a>p.balance)return alert('Payment is greater than current due');p.balance-=a;db.payments.push({date:ledgerDate.value,customer:p.name,customerId:p.id,amount:a,mode:ledgerMode.value});persist();ledgerAmount.value='';alert('Payment recorded and customer due reduced')}
+function renderLedger(){let c=db.parties.filter(p=>p.type==='Customer');ledgerTable.innerHTML=table(['Customer','Phone','Outstanding Due'],c.map(p=>[esc(p.name),esc(p.phone),`<span class="due">${money(p.balance)}</span>`]));paymentTable.innerHTML=table(['Date','Customer','Mode','Amount'],db.payments.slice().reverse().map(p=>[p.date,esc(p.customer),p.mode,money(p.amount)]))}
+function renderReports(){let sales=db.invoices.reduce((s,i)=>s+i.subtotal,0),cogs=db.invoices.reduce((s,i)=>s+i.lines.reduce((t,l)=>t+l.qty*l.cost,0),0),purchase=db.purchases.reduce((s,p)=>s+p.total,0);rSales.textContent=money(sales);rCogs.textContent=money(cogs);rProfit.textContent=money(sales-cogs);rPurchase.textContent=money(purchase)}
+function exportBackup(){let blob=new Blob([JSON.stringify(db,null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='sadrun-traders-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href)}
+function restoreBackup(e){let f=e.target.files[0];if(!f)return;let r=new FileReader();r.onload=()=>{try{let d=JSON.parse(r.result);if(!d.items||!d.invoices)throw 0;db=d;persist();alert('Backup restored')}catch(_){alert('Invalid backup file')}};r.readAsText(f)}
+function downloadSample(){let a=document.createElement('a'),b=new Blob(['name,sku,cost,price,stock,gst\\nUrea 45kg,UREA45,260,270,100,5\\nDAP 50kg,DAP50,1200,1350,25,5'],{type:'text/csv'});a.href=URL.createObjectURL(b);a.download='sadrun-items-sample.csv';a.click()}
+function importCsv(){let f=bulkFile.files[0];if(!f)return alert('Choose a CSV file');if(!/\\.csv$|\\.txt$/i.test(f.name))return alert('For automatic item import, select a CSV file. PDF/image OCR is not enabled in this version.');let r=new FileReader();r.onload=()=>{let lines=r.result.split(/\\r?\\n/).filter(Boolean),head=lines.shift().split(',').map(x=>x.trim().toLowerCase()),idx=k=>head.indexOf(k);let count=0;lines.forEach(line=>{let c=line.split(',').map(x=>x.trim());let name=c[idx('name')];if(!name)return;db.items.push({id:String(Date.now()+count),name,sku:c[idx('sku')]||'',cost:Number(c[idx('cost')]||0),price:Number(c[idx('price')]||0),stock:Number(c[idx('stock')]||0),gst:Number(c[idx('gst')]||0)});count++});persist();alert(count+' items imported. Review all imported prices and stock.');};r.readAsText(f)}
+bulkFile.addEventListener('change',e=>{let f=e.target.files[0];fileInfo.textContent=f?`${f.name} · ${(f.size/1024).toFixed(1)} KB selected`:'';importPreview.innerHTML='';if(f&&f.type.startsWith('image/')){let im=document.createElement('img');im.src=URL.createObjectURL(f);im.style.maxWidth='100%';im.style.maxHeight='240px';importPreview.appendChild(im)}else if(f&&f.type==='application/pdf')importPreview.textContent='PDF selected. CSV import is available; OCR extraction needs to be integrated.'});
+function findBarcode(){let v=scanCode.value.trim(),x=db.items.find(a=>a.sku===v||a.name.toLowerCase()===v.toLowerCase());scanResult.textContent=x?`${x.name} · Stock: ${x.stock} · Selling price: ${money(x.price)}`:'No matching item found'}
+async function startCameraScan(){if(!('BarcodeDetector'in window))return alert('Camera barcode scanning is not supported by this browser. Use a handheld scanner or enter the barcode.');try{let stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}),v=scannerVideo;v.srcObject=stream;v.classList.remove('hidden');let detector=new BarcodeDetector();let scan=async()=>{if(v.classList.contains('hidden'))return;try{let codes=await detector.detect(v);if(codes.length){scanCode.value=codes[0].rawValue;findBarcode();stream.getTracks().forEach(t=>t.stop());v.classList.add('hidden');return}}catch(e){}requestAnimationFrame(scan)};scan()}catch(e){alert('Camera permission was not granted')}}
+function printBarcodes(){let w=window.open('','_blank');if(!w)return alert('Allow pop-ups to print labels');w.document.write('<html><head><title>Barcode Labels</title><style>body{font-family:Arial}.labels{display:grid;grid-template-columns:repeat(3,1fr);gap:15px}.label{border:1px dashed #aaa;padding:12px;text-align:center;break-inside:avoid}svg{width:100%;height:55px}</style></head><body><h2>SADRUN TRADERS - Item Labels</h2><div class="labels">'+db.items.map(x=>`<div class="label"><b>${esc(x.name)}</b><p>${esc(x.sku)}</p><b>${money(x.price)}</b></div>`).join('')+'</div><script>window.print()<\\/script></body></html>');w.document.close()}
+function saveSettings(){db.settings={name:bizName.value,phone:bizPhone.value,address:bizAddress.value,gstin:bizGstin.value};persist();alert('Settings saved')}
+init();
+</script>
+</body>
+</html>
